@@ -28,12 +28,14 @@ app.use(passport.initialize());
 
 var router = express.Router();
 
-app.get("/", (req, res) =>
+router.get("/", (req, res) =>
     res.status(200).send("Hello TheWebDev"));
 
 
 app.listen(port, () => console.log(`Listening on localhost: ${port}`));
 
+app.use('/', router);
+app.listen(process.env.PORT || 8080);
 
 
 // //I Don't think I need for this assignment because we want data from request body
