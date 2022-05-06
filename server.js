@@ -14,7 +14,7 @@ var passport = require('passport');
 var cors = require('cors');
 // var User = require('./dbCards.js');
 // var Movie = require('./Movies');
-var Card = require('./dbCards');
+var Cards = require('./dbCards');
 
 var app = express();
 
@@ -33,8 +33,33 @@ router.get('/get', function(req, res) {
 router.post('/dating/cards', function (req,res) {
     if(!req.body.name)
     {
-
+        res.json({success: false, msg: 'Please include both username and password to signup.'})
     }
+    else
+    {
+        var dbCard = new Cards;
+        dbCard.name = req.body.name;
+
+        Cards.create(dbCard, (err, data) => {
+            if(err) {
+                res.status(500).send(err)
+            }
+            else {
+                res.status(201).send(data)
+            }
+        })
+    }
+});
+
+router.get('/dating/cards', (req, res) => {
+    Cards.find((err, data) => {
+        if(err) {
+            res.status(500).send(err)
+        }
+        else {
+            res.status(201).send(data)
+        }
+    })
 });
 
 
