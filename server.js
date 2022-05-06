@@ -83,10 +83,11 @@ router.post('/signin', function (req, res) {
 
 
 //Add New Card
-router.post('/dating/cards', function (req,res) {
+router.route('/dating/cards')
+.post(authJwtController.isAuthenticated, function (req,res) {
     if(!req.body.name)
     {
-        res.json({success: false, msg: 'Please include both username and password to signup.'})
+        res.json({success: false, msg: 'Please include both username and password to signin.'})
     }
     else
     {
@@ -103,7 +104,7 @@ router.post('/dating/cards', function (req,res) {
             }
         })
     }
-});
+})
 
 //Get all the cards
 router.get('/dating/cards', (req, res) => {
