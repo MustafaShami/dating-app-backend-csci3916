@@ -28,7 +28,7 @@ app.use(passport.initialize());
 
 var router = express.Router();
 
-router.post('/signup', function(req, res) {
+router.post('/', function(req, res) {
     res.json({success: true, msg: 'YAY CONNECTED.'})
 });
 
