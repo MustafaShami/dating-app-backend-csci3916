@@ -1,0 +1,24 @@
+{
+  "name": "dating-app-backend",
+  "version": "1.0.0",
+  "description": "Back end for dating app (csci3916 final project)",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MustafaShami/dating-app-backend-csci3916.git"
+  },
+  "keywords": [
+    "Node.js"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MustafaShami/dating-app-backend-csci3916/issues"
+  },
+  "homepage": "https://github.com/MustafaShami/dating-app-backend-csci3916#readme"
+}
