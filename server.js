@@ -19,6 +19,7 @@ var User = require('./Cards.js');
 var Movie = require('./Movies');
 
 var app = express();
+const port = process.env.PORT || 8080
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,8 +28,11 @@ app.use(passport.initialize());
 
 var router = express.Router();
 
+app.get("/", (req, res) =>
+    res.status(200).send("Hello TheWebDev"));
 
 
+app.listen(port, () => console.log(`Listening on localhost: ${port}`));
 
 
 
