@@ -28,7 +28,7 @@ app.use(passport.initialize());
 
 var router = express.Router();
 
-router.post('/', function(req, res) {
+router.get('/', function(req, res) {
     res.json({success: true, msg: 'YAY CONNECTED.'})
 });
 
