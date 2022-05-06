@@ -1,8 +1,12 @@
 /*
-CSC3916 HW3
+CSC3916 Final Project
 File: Server.js
-Description: Web API scaffolding for Movie API
+Description: Web API scaffolding for Dating App
  */
+
+// import express from 'express'
+// import mongoose from 'mongoose'
+
 
 var express = require('express');
 var bodyParser = require('body-parser');
