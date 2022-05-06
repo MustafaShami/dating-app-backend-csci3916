@@ -8,11 +8,11 @@ Description: Web API scaffolding for Dating App
 var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
-// var authController = require('./auth');
-// var authJwtController = require('./auth_jwt');
-// var jwt = require('jsonwebtoken');
+var authController = require('./auth');
+var authJwtController = require('./auth_jwt');
+var jwt = require('jsonwebtoken');
 var cors = require('cors');
-// var User = require('./dbCards.js');
+var User = require('./Users.js');
 // var Movie = require('./Movies');
 var Cards = require('./dbCards');
 
@@ -26,10 +26,63 @@ app.use(passport.initialize());
 
 var router = express.Router();
 
+//Testing connection
 router.get('/', function(req, res) {
     res.json({success: true, msg: 'YAY CONNECTED.'})
 });
 
+
+
+
+router.post( '/signup', function(req, res) {
+    if (!req.body.name || !req.body.username || !req.body.password) {
+        res.json({success: false, msg: 'Please include both name, username, and password to signup.'})
+    } else {
+        var user = new User();
+        user.name = req.body.name;
+        user.username = req.body.username;
+        user.password = req.body.password;
+
+        user.save(function(err){
+            if (err) {
+                if (err.code == 11000)
+                    return res.json({ success: false, message: 'A user with that username already exists.'});
+                else
+                    return res.json(err);
+            }
+
+            res.json({success: true, msg: 'Successfully created new user.'})
+        });
+    }
+});
+
+router.post('/signin', function (req, res) {
+    var userNew = new User();
+    userNew.username = req.body.username;
+    userNew.password = req.body.password;
+
+    User.findOne({ username: userNew.username }).select('name username password').exec(function(err, user) {
+        if (err) {
+            res.send(err);
+        }
+
+        user.comparePassword(userNew.password, function(isMatch) {
+            if (isMatch) {
+                var userToken = { id: user.id, username: user.username };
+                var token = jwt.sign(userToken, process.env.SECRET_KEY);
+                res.json ({success: true, token: 'JWT ' + token});
+            }
+            else {
+                res.status(401).send({success: false, msg: 'Authentication failed.'});
+            }
+        })
+    })
+});
+
+
+
+
+//Add New Card
 router.post('/dating/cards', function (req,res) {
     if(!req.body.name)
     {
@@ -52,6 +105,7 @@ router.post('/dating/cards', function (req,res) {
     }
 });
 
+//Get all the cards
 router.get('/dating/cards', (req, res) => {
     Cards.find((err, data) => {
         if(err) {
@@ -63,6 +117,11 @@ router.get('/dating/cards', (req, res) => {
     })
 });
 
+
+app.use('/', router);
+app.listen(process.env.PORT || 8080);
+
+//Alternate way to write the above code I think
 // router.route('/dating/cards')
 //     //Enter Card Information
 //     .post( function (req, res) {
@@ -115,8 +174,6 @@ router.get('/dating/cards', (req, res) => {
 //     });
 
 
-app.use('/', router);
-app.listen(process.env.PORT || 8080);
 
 
 // //I Don't think I need for this assignment because we want data from request body
@@ -140,7 +197,7 @@ app.listen(process.env.PORT || 8080);
 //
 // router.post('/signup', function(req, res) {
 //     if (!req.body.username || !req.body.password) {
-//         res.json({success: false, msg: 'Please include both username and password to signup.'})
+//         res.json({success: false, msg: 'Please include both name and password to signup.'})
 //     } else {
 //         var user = new User();
 //         user.name = req.body.name;
