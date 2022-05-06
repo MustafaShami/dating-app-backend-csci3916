@@ -28,11 +28,10 @@ app.use(passport.initialize());
 
 var router = express.Router();
 
-router.get("/", (req, res) =>
-    res.status(200).send("Hello TheWebDev"));
+router.post('/signup', function(req, res) {
+    res.json({success: true, msg: 'YAY CONNECTED.'})
+});
 
-
-app.listen(port, () => console.log(`Listening on localhost: ${port}`));
 
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
