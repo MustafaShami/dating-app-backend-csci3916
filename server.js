@@ -4,9 +4,6 @@ File: Server.js
 Description: Web API scaffolding for Dating App
  */
 
-// import express from 'express'
-// import mongoose from 'mongoose'
-
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -28,7 +25,7 @@ app.use(passport.initialize());
 
 var router = express.Router();
 
-router.get('/', function(req, res) {
+router.get('/get', function(req, res) {
     res.json({success: true, msg: 'YAY CONNECTED.'})
 });
 

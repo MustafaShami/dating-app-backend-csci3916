@@ -17,31 +17,31 @@ mongoose.set('useCreateIndex', true);
 var CardSchema = new Schema({
     name: { type: String, required: true},
     imgUrl: String,
-    password: { type: String, required: true, select: false }
+    //password: { type: String, required: true, select: false }
 });
 
-CardSchema.pre('save', function(next) {
-    var user = this;
+// CardSchema.pre('save', function(next) {
+//     var user = this;
+//
+//     //hash the password
+//     if (!user.isModified('password')) return next();
+//
+//     bcrypt.hash(user.password, null, null, function(err, hash) {
+//         if (err) return next(err);
+//
+//         //change the password
+//         user.password = hash;
+//         next();
+//     });
+// });
 
-    //hash the password
-    if (!user.isModified('password')) return next();
-
-    bcrypt.hash(user.password, null, null, function(err, hash) {
-        if (err) return next(err);
-
-        //change the password
-        user.password = hash;
-        next();
-    });
-});
-
-CardSchema.methods.comparePassword = function (password, callback) {
-    var user = this;
-
-    bcrypt.compare(password, user.password, function(err, isMatch) {
-        callback(isMatch);
-    })
-}
+// CardSchema.methods.comparePassword = function (password, callback) {
+//     var user = this;
+//
+//     bcrypt.compare(password, user.password, function(err, isMatch) {
+//         callback(isMatch);
+//     })
+// }
 
 //return the model to server
 module.exports = mongoose.model('User', CardSchema);
