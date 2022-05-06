@@ -44,4 +44,4 @@ var CardSchema = new Schema({
 // }
 
 //return the model to server
-module.exports = mongoose.model('Card', CardSchema);
+module.exports = mongoose.model('card', CardSchema);
