@@ -7,16 +7,16 @@ Description: Web API scaffolding for Dating App
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var passport = require('passport');
-var authController = require('./auth');
-var authJwtController = require('./auth_jwt');
-var jwt = require('jsonwebtoken');
+ var passport = require('passport');
+// var authController = require('./auth');
+// var authJwtController = require('./auth_jwt');
+// var jwt = require('jsonwebtoken');
 var cors = require('cors');
-var User = require('./Cards.js');
-var Movie = require('./Movies');
+// var User = require('./Cards.js');
+// var Movie = require('./Movies');
 
 var app = express();
-const port = process.env.PORT || 8080
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
