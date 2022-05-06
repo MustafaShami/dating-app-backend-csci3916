@@ -39,6 +39,7 @@ router.post('/dating/cards', function (req,res) {
     {
         var dbCard = new Cards;
         dbCard.name = req.body.name;
+        dbCard.imgUrl = req.body.imgUrl;
 
         Cards.create(dbCard, (err, data) => {
             if(err) {
