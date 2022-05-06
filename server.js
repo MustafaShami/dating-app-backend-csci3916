@@ -30,37 +30,88 @@ router.get('/get', function(req, res) {
     res.json({success: true, msg: 'YAY CONNECTED.'})
 });
 
-router.post('/dating/cards', function (req,res) {
-    if(!req.body.name)
-    {
-        res.json({success: false, msg: 'Please include both username and password to signup.'})
-    }
-    else
-    {
-        var dbCard = new Cards;
-        dbCard.name = req.body.name;
+// router.post('/dating/cards', function (req,res) {
+//     if(!req.body.name)
+//     {
+//         res.json({success: false, msg: 'Please include both username and password to signup.'})
+//     }
+//     else
+//     {
+//         var dbCard = new Cards;
+//         dbCard.name = req.body.name;
+//
+//         Cards.create(dbCard, (err, data) => {
+//             if(err) {
+//                 res.status(500).send(err)
+//             }
+//             else {
+//                 res.status(201).send(data)
+//             }
+//         })
+//     }
+// });
+//
+// router.get('/dating/cards', (req, res) => {
+//     Cards.find((err, data) => {
+//         if(err) {
+//             res.status(500).send(err)
+//         }
+//         else {
+//             res.status(201).send(data)
+//         }
+//     })
+// });
 
-        Cards.create(dbCard, (err, data) => {
-            if(err) {
-                res.status(500).send(err)
-            }
-            else {
-                res.status(201).send(data)
-            }
-        })
-    }
-});
+router.route('/dating/cards')
+    //Enter Card Information
+    .post( function (req, res) {
+        if(!req.body.name)// Check to make sure all necessary information was included
+        {
+            res.status(400).json({success: false, message: 'remember to include name'});
+        }
+        else
+        {
+            var newCard = new Cards(); //create new movie object and then assign it value from the request body
+            newCard.name = req.body.name;
+            newCard.imgUrl = req.body.imgUrl;
 
-router.get('/dating/cards', (req, res) => {
-    Cards.find((err, data) => {
-        if(err) {
-            res.status(500).send(err)
+            //save the new movie and check to make sure it was saved sucessfully
+            newCard.save(function(err)
+            {
+                if(err)
+                {
+                    if (err.code == 11000)
+                    {return res.json({ success: false, message: 'Duplicate Error'});}
+                    else
+                    {return res.json(err);}
+                }
+                else
+                {
+                    return res.status(200).json({success:true , message:'Card Saved!'});
+                }
+            })
         }
-        else {
-            res.status(201).send(data)
         }
-    })
-});
+    )
+
+//     //Get All Cards in the database
+    .get( function (req, res) {
+        Cards.find().exec(function (err, cards) //get movies from database
+        {
+            if(err) //check if error while getting movies from database
+            {
+                return res.status(500).send(err);
+            }
+            if(cards.length == 0) //check if there are any movies in the database
+            {
+                res.status(204).json({success:false , message:'There are no movies in the database.'});
+            }
+            else if(cards.length >= 1)
+            {   //return the list of movies
+                res.status(200).json({success:true , message:'Here is all the movies in the database.' , cards});
+            }
+        });
+    });
 
 
 app.use('/', router);
