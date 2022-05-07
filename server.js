@@ -84,18 +84,31 @@ router.post('/signin', function (req, res) {
 
 //Add New Card
 router.route('/dating/cards')
-.post(authJwtController.isAuthenticated, function (req,res) {
-    if(!req.body.name)
-    {
-        res.json({success: false, msg: 'Please include both username and password to signin.'})
-    }
-    else
-    {
-        var dbCard = new Cards;
-        dbCard.name = req.body.name;
-        dbCard.imgUrl = req.body.imgUrl;
+    .post(authJwtController.isAuthenticated, function (req,res) {
+        if(!req.body.name)
+        {
+            res.json({success: false, msg: 'Please include both username and password to signin.'})
+        }
+        else
+        {
+            var dbCard = new Cards;
+            dbCard.name = req.body.name;
+            dbCard.imgUrl = req.body.imgUrl;
 
-        Cards.create(dbCard, (err, data) => {
+            Cards.create(dbCard, (err, data) => {
+                if(err) {
+                    res.status(500).send(err)
+                }
+                else {
+                    res.status(201).send(data)
+                }
+            })
+        }
+    })
+
+    //Get all the cards
+    .get(function (req, res) {
+        Cards.find((err, data) => {
             if(err) {
                 res.status(500).send(err)
             }
@@ -103,32 +116,19 @@ router.route('/dating/cards')
                 res.status(201).send(data)
             }
         })
-    }
-})
-
-//Get all the cards
-.get(function (req, res) {
-    Cards.find((err, data) => {
-        if(err) {
-            res.status(500).send(err)
-        }
-        else {
-            res.status(201).send(data)
-        }
     })
-})
 
-router.delete(authJwtController.isAuthenticated, function (req,res) {
-    Cards.remove().exec( function (err, data) {
-        if(err) {
-            res.status(500).send(err)
-        }
-        else
-        {
-            res.status(200);
-        }
-    })
-})
+    .delete(authJwtController.isAuthenticated, function (req,res) {
+        Cards.remove().exec( function (err, data) {
+            if(err) {
+                res.status(500).send(err)
+            }
+            else
+            {
+                res.status(200);
+            }
+        })
+    });
 
 
 app.use('/', router);
