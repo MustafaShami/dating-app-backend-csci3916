@@ -120,13 +120,7 @@ router.route('/dating/cards')
 
     .delete(authJwtController.isAuthenticated, function (req,res) {
         Cards.remove().exec( function (err, data) {
-            if(err) {
-                res.status(500).send(err)
-            }
-            else
-            {
-                res.status(200);
-            }
+            res.status(200);
         })
     });
 
