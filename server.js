@@ -107,7 +107,7 @@ router.route('/dating/cards')
 })
 
 //Get all the cards
-router.get('/dating/cards', (req, res) => {
+.get(function (req, res) {
     Cards.find((err, data) => {
         if(err) {
             res.status(500).send(err)
@@ -116,7 +116,19 @@ router.get('/dating/cards', (req, res) => {
             res.status(201).send(data)
         }
     })
-});
+})
+
+router.delete(authJwtController.isAuthenticated, function (req,res) {
+    Cards.remove().exec( function (err, data) {
+        if(err) {
+            res.status(500).send(err)
+        }
+        else
+        {
+            res.status(200);
+        }
+    })
+})
 
 
 app.use('/', router);
